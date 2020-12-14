@@ -1,3 +1,3 @@
-import ChatRoom from "./ChatRoom";
+import ChaRoom from "./ChatRoom";
 
-export default ChatRoom;
+export default ChaRoom;

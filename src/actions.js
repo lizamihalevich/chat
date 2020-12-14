@@ -1,6 +1,7 @@
 import { createAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API_BASE } from "./config";
+import { post } from "./utils/request";
 
 const sendMessageRequest = createAction("SEND_MESSAGE_REQUEST");
 const updateChatLog = createAction("UPDATE_CHAT_LOG");
@@ -35,6 +36,37 @@ const joinRoom = (roomId) => async (dispatch) => {
 
 const setUsername = createAction("SET_USERNAME");
 
+const setAuthData = createAction("SET_AUTH_DATA");
+const failSignIn = createAction("FAIL_SIGN_IN");
+
+const setAuthSuccess = createAction("SET_AUTH_SUCCESS");
+const setAuthLogOut = createAction("SET_AUTH_LOG_OUT");
+
+const signInUser = (authData) => async (dispatch) => {
+  try {
+    const response = await post("http://localhost:3000/signin", {
+      data: authData,
+    });
+    dispatch(setAuthData(response.data));
+  } catch (e) {
+    dispatch(failSignIn());
+  }
+};
+
+const addNewUser = createAction("ADD_NEW_USER");
+const failAddNewUser = createAction("FAIL_ADD_NEW_USER");
+
+const addNewUserToDatabase = (user) => async (dispatch) => {
+  try {
+    const response = await post("http://localhost:3000/register", {
+      data: user,
+    });
+    dispatch(addNewUser(response.data));
+  } catch (e) {
+    dispatch(failAddNewUser());
+  }
+};
+
 export {
   sendMessageRequest,
   updateChatLog,
@@ -47,4 +79,11 @@ export {
   joinRoomError,
   joinRoom,
   setUsername,
+  setAuthData,
+  signInUser,
+  failSignIn,
+  setAuthSuccess,
+  setAuthLogOut,
+  addNewUser,
+  addNewUserToDatabase,
 };
